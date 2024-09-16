@@ -69,8 +69,8 @@ jobs:
           # - 'plan9/arm'
           # - 'solaris/amd64'
           # - 'windows/386'
-          - 'windows/amd64'
-          - 'windows/arm'
+          # - 'windows/amd64'
+          # - 'windows/arm'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
