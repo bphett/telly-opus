@@ -1,6 +1,6 @@
 # telly
 
-IPTV proxy for Plex Live written in Golang
+IPTV proxy for Plex Live written in Golang, with ffmpeg audio output in OPUS format
 
 Please refer to the [Wiki](https://github.com/tellytv/telly/wiki) for the most current documentation.
 
