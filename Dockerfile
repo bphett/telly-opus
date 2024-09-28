@@ -1,4 +1,5 @@
-FROM scratch
+#FROM scratch
+FROM ubuntu:latest
 #COPY https://github.com/bphett/telly-opus/releases/download/v1.1.0.12/telly-opus-linux-amd64 ./app
 
 # Install curl or wget (choose whichever is preferred)
