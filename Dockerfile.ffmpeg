@@ -11,7 +11,7 @@ RUN curl -L https://github.com/bphett/telly-opus/releases/download/v1.1.0.16/tel
 RUN chmod +x ./app
 
 # Install ffmpeg
-RUN apt-get install -y ffmpeg
+#RUN apt-get install -y ffmpeg
 
 EXPOSE 6077
 ENTRYPOINT ["./app"]
