@@ -1,4 +1,5 @@
-FROM ubuntu:latest
+#FROM ubuntu:latest
+FROM jrottenberg/ffmpeg:4.4.1-ubuntu2004
 
 # Install curl or wget (choose whichever is preferred)
 RUN apt-get update && apt-get install -y curl
