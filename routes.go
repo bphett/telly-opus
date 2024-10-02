@@ -191,14 +191,35 @@ func stream(lineup *lineup) gin.HandlerFunc {
 				return
 			}
 
+			resp, err := http.Get(channelURI.String())
+			if err != nil {
+    				log.WithError(err).Errorln("Error fetching stream from channel URI")
+    				return
+			}
+			defer resp.Body.Close()
+			
 			log.Infoln("Remuxing stream with ffmpeg")
-			run := exec.Command("ffmpeg", "-i", "pipe:0", "-c:v", "copy", "-c:a", "copy", "-f", "mpegts", "-t", "30", "/etc/telly/test.ts")
-			log.Infof("Executing ffmpeg as \"%s\"", strings.Join(run.Args, " "))
-
+			run := exec.Command("ffmpeg", "-i", "pipe:0", "-c:v", "copy", "-c:a", "copy", "-f", "mpegts", "pipe:1")
+			log.Debugf("Executing ffmpeg as \"%s\"", strings.Join(run.Args, " "))
 		        log.Infof("URI is %s", channelURI)
+
+			ffmpegin, err := run.StdinPipe()
+			if err != nil {
+    				log.WithError(err).Errorln("Error creating ffmpeg stdin pipe")
+    				return
+			}
+
+			go func() {
+    				defer ffmpegin.Close()
+    				_, err := io.Copy(ffmpegin, resp.Body)
+    				if err != nil {
+        				log.WithError(err).Errorln("Error piping data to ffmpeg")
+    				}
+			}()
+
 			ffmpegout, err := run.StdoutPipe()
 			if err != nil {
-				log.WithError(err).Errorln("StdoutPipe Error")
+				log.WithError(err).Errorln("Error creating ffmpeg StdoutPipe")
 				return
 			}
 
