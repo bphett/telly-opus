@@ -192,7 +192,7 @@ func stream(lineup *lineup) gin.HandlerFunc {
 			}
 
 			log.Infoln("Remuxing stream with ffmpeg")
-			run := exec.Command("ffmpeg", "-f", "mpegts", "-i", "pipe:0", "-c:v", "copy", "-c:a", "copy", "-f", "mpegts", "pipe:1")
+			run := exec.Command("ffmpeg", "-i", "pipe:0", "-c:v", "copy", "-c:a", "copy", "-f", "mpegts", "-t", "30", "/etc/telly/test.ts")
 			log.Infof("Executing ffmpeg as \"%s\"", strings.Join(run.Args, " "))
 
 		        log.Infof("URI is %s", channelURI)
