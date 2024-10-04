@@ -1,16 +1,10 @@
-# telly
+# telly-opus
 
-IPTV proxy for Plex Live written in Golang, with ffmpeg audio output in OPUS format
+IPTV proxy for Plex Live TV written in Golang, with ffmpeg audio output in OPUS format
+This project is based on tellytv/telly
 
-Please refer to the [Wiki](https://github.com/tellytv/telly/wiki) for the most current documentation.
 
-## This readme refers to version 1.1.x .  It does not apply to versions other than that.
-
-The [Wiki](https://github.com/tellytv/telly/wiki) includes walkthroughs for most platforms that go into more detail than listed below:
-
-## THIS IS A DEVELOPMENT BRANCH
-
-It is under active development and things may change quickly and dramatically.  Please join the discord server if you use this branch and be prepared for some tinkering and breakage.
+## This readme refers to version 1.1.0.29 .  It does not apply to versions other than that.
 
 # Configuration
 
@@ -93,50 +87,32 @@ Here's an example configuration file. **You will need to create this file.**  It
 Telly can buffer the streams to Plex through ffmpeg.  This has the potential for several benefits, but today it primarily:
 
 1. Allows support for stream formats that may cause problems for Plex directly.
-1. Eliminates the use of redirects and makes it possible for telly to report exactly why a given stream failed.
+2. Eliminates the use of redirects and makes it possible for telly to report exactly why a given stream failed.
+3. Makes use of the OPUS audio format
 
 To take advantage of this, ffmpeg must be installed and available in your path.
 
 # Docker
 
-There are two different docker images available:
-
-## tellytv/telly:dev
-The standard docker image for the dev branch
-
-## tellytv/telly:dev-ffmpeg
-This docker image has ffmpeg preinstalled.  If you want to use the ffmpeg feature, use this image.  It may be safest to use this image generally, since it is not much larger than the standard image and allows you to turn the ffmpeg features on and off without requiring changes to your docker run command.  The examples below use this image.
-
-## `docker run`
-```
-docker run -d \
-  --name='telly' \
-  --net='bridge' \
-  -e TZ="America/Chicago" \
-  -p '6077:6077/tcp' \
-  -v /host/path/to/telly.config.toml:/etc/telly/telly.config.toml \
-  --restart unless-stopped \
-  tellytv/telly:dev-ffmpeg
-```
-
+To use telly-opus, use the following docker-compose:
 ## docker-compose
 ```
-telly:
-  image: tellytv/telly:dev-ffmpeg
-  ports:
-    - "6077:6077"
-  environment:
-    - TZ=Europe/Amsterdam
-  volumes:
-    - /host/path/to/telly.config.toml:/etc/telly/telly.config.toml
-  restart: unless-stopped
+version: "3.8"
+
+services:
+  telly:
+    build:
+      context: https://github.com/bphett/telly-opus.git
+      dockerfile: Dockerfile.ffmpeg
+    ports:
+      - "6077:6077"
+    environment:
+      - TZ=America/Chicago
+    volumes:
+      - ${ConfigFolder}:/etc/telly
+    env_file:
+      - stack.env  
+    restart: unless-stopped
 ```
 
-# Troubleshooting
-
-Please free to [open an issue](https://github.com/tellytv/telly/issues) if you run into any problems at all, we'll be more than happy to help.
-
-# Social
-
-We have [a Discord server you can join!](https://discord.gg/bnNC8qX)
-
+${ConfigFolder} in your stack.env should be set to wherever you have your M3U and the telly config file. I placed mine on a Windows Share.
