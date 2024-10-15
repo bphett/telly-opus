@@ -199,7 +199,7 @@ func stream(lineup *lineup) gin.HandlerFunc {
 			defer resp.Body.Close()
 			
 			log.Infoln("Remuxing stream with ffmpeg")
-			run := exec.Command("ffmpeg", "-fflags", "+genpts", "-i", "pipe:0", "-async", "1", "-fps_mode", "cfr", "-c:v", "copy", "-c:a", "libopus", "-sn", "-f", "mpegts", "pipe:1")
+			run := exec.Command("ffmpeg", "-fflags", "+genpts", "-i", "pipe:0", "-async", "1", "-fps_mode", "cfr", "-c:v", "copy", "-c:a", "libopus", "-bsf:v", "filter_units=remove_types=6", "-f", "mpegts", "pipe:1")
 			log.Debugf("Executing ffmpeg as \"%s\"", strings.Join(run.Args, " "))
 
 			ffmpegin, err := run.StdinPipe()
