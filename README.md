@@ -84,7 +84,7 @@ Here's an example configuration file. **You will need to create this file.**  It
 
 # FFMpeg
 
-Telly can buffer the streams to Plex through ffmpeg.  This has the potential for several benefits, but today it primarily:
+telly-opus buffers the streams to Plex through ffmpeg.  This has the potential for several benefits, but today it primarily:
 
 1. Allows support for stream formats that may cause problems for Plex directly.
 2. Eliminates the use of redirects and makes it possible for telly to report exactly why a given stream failed.
@@ -94,7 +94,7 @@ To take advantage of this, ffmpeg must be installed and available in your path.
 
 # Docker
 
-To use telly-opus, use the following docker-compose:
+To use telly-opus with full audio/video proxying/transcoding, use the following docker-compose:
 ## docker-compose
 ```
 version: "3.8"
@@ -115,4 +115,26 @@ services:
     restart: unless-stopped
 ```
 
+To use telly-opus with ONLY audio transcoding to OPUS (leaves video stream as-is), use the following docker-compose:
+## docker-compose
+```
+version: "3.8"
+
+services:
+  telly:
+    build:
+      context: https://github.com/bphett/telly-opus.git
+      dockerfile: Dockerfile
+    ports:
+      - "6077:6077"
+    environment:
+      - TZ=America/Chicago
+    volumes:
+      - ${ConfigFolder}:/etc/telly
+    env_file:
+      - stack.env  
+    restart: unless-stopped
+```
+
+Important Note:
 ${ConfigFolder} in your stack.env should be set to wherever you have your M3U and the telly config file. I placed mine on a Windows Share.
