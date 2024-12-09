@@ -1,10 +1,10 @@
 # telly-opus
 
-IPTV proxy for Plex Live TV written in Golang, with ffmpeg audio output in OPUS format
+Transcoding/Buffering IPTV proxy for Plex Live TV written in Golang, with audio output in OPUS format
 This project is based on tellytv/telly
 
 
-## This readme refers to version 1.1.0.29 .  It does not apply to versions other than that.
+## README
 
 # Configuration
 
